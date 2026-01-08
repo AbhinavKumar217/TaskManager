@@ -3,9 +3,12 @@ package com.abhinav.taskmanager.service.impl;
 import com.abhinav.taskmanager.dto.CreateUserRequest;
 import com.abhinav.taskmanager.entity.User;
 import com.abhinav.taskmanager.exception.DuplicateResourceException;
+import com.abhinav.taskmanager.exception.ResourceNotFoundException;
 import com.abhinav.taskmanager.repository.UserRepository;
 import com.abhinav.taskmanager.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -23,5 +26,17 @@ public class UserServiceImpl implements UserService {
         user.setName(request.getName());
         user.setEmail(request.getEmail());
 
-        return userRepository.save(user);    }
+        return userRepository.save(user);
+    }
+
+    @Override
+    public Page<User> getAllUsers(Pageable pageable) {
+        return userRepository.findAll(pageable);
+    }
+
+    @Override
+    public User getUserById(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+    }
 }
