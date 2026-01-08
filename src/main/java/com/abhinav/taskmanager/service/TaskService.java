@@ -1,6 +1,7 @@
 package com.abhinav.taskmanager.service;
 
 import com.abhinav.taskmanager.dto.CreateTaskRequest;
+import com.abhinav.taskmanager.dto.TaskRequest;
 import com.abhinav.taskmanager.entity.Task;
 import com.abhinav.taskmanager.entity.TaskPriority;
 import com.abhinav.taskmanager.entity.TaskStatus;
@@ -20,4 +21,10 @@ public interface TaskService {
     );
 
     Task getTaskById(Long id);
+
+    Task updateTask(Long taskId, TaskRequest request);
+
+    Task updateTaskStatus(Long taskId, TaskStatus status);
+
+    void deleteTask(Long id);
 }
