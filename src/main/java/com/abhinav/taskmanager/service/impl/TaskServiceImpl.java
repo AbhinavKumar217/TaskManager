@@ -7,9 +7,13 @@ import com.abhinav.taskmanager.entity.TaskStatus;
 import com.abhinav.taskmanager.entity.User;
 import com.abhinav.taskmanager.exception.ResourceNotFoundException;
 import com.abhinav.taskmanager.repository.TaskRepository;
+import com.abhinav.taskmanager.repository.TaskSpecifications;
 import com.abhinav.taskmanager.repository.UserRepository;
 import com.abhinav.taskmanager.service.TaskService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -45,4 +49,26 @@ public class TaskServiceImpl implements TaskService {
 
         return taskRepository.save(task);
     }
+
+    @Override
+    public Page<Task> getTasks(
+            TaskStatus status,
+            TaskPriority priority,
+            Long assignedToUserId,
+            Pageable pageable
+    ) {
+        Specification<Task> spec = Specification
+                .where(TaskSpecifications.hasStatus(status))
+                .and(TaskSpecifications.hasPriority(priority))
+                .and(TaskSpecifications.assignedToUser(assignedToUserId));
+
+        return taskRepository.findAll(spec, pageable);
+    }
+
+    @Override
+    public Task getTaskById(Long id) {
+        return taskRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Task not found"));
+    }
+
 }
