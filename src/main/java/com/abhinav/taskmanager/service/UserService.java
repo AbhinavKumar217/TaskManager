@@ -4,7 +4,9 @@ import com.abhinav.taskmanager.dto.CreateUserRequest;
 import com.abhinav.taskmanager.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
+@Service
 public interface UserService {
     User createUser(CreateUserRequest request);
 
