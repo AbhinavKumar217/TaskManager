@@ -1,7 +1,9 @@
 package com.abhinav.taskmanager.controller;
 
 import com.abhinav.taskmanager.dto.CreateTaskRequest;
+import com.abhinav.taskmanager.dto.TaskRequest;
 import com.abhinav.taskmanager.dto.TaskResponse;
+import com.abhinav.taskmanager.dto.TaskStatusUpdateRequest;
 import com.abhinav.taskmanager.entity.Task;
 import com.abhinav.taskmanager.entity.TaskPriority;
 import com.abhinav.taskmanager.entity.TaskStatus;
@@ -48,4 +50,25 @@ public class TaskController {
         return TaskResponse.from(taskService.getTaskById(id));
     }
 
+    @PutMapping("/{id}")
+    public TaskResponse updateTask(
+            @PathVariable Long id,
+            @Valid @RequestBody TaskRequest request
+    ) {
+        return TaskResponse.from(taskService.updateTask(id, request));
+    }
+
+    @PatchMapping("/{id}/status")
+    public TaskResponse updateStatus(
+            @PathVariable Long id,
+            @Valid @RequestBody TaskStatusUpdateRequest request
+    ) {
+        return TaskResponse.from(taskService.updateTaskStatus(id, request.getStatus()));
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteTask(@PathVariable Long id) {
+        taskService.deleteTask(id);
+    }
 }
